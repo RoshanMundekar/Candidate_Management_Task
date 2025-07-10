@@ -28,12 +28,11 @@ A web-based Candidate Management System built with **Flask**, **Tailwind CSS**, 
 ---
 
 
----
+## 📹 Demo Video
 
-📹 **Demo Video**  
-[Download or Watch Video](assets/demo.mp4)
+![Candidate Management System Demo](assets/demo.gif)
 
----
+> The above GIF demonstrates adding, editing, and deleting candidates via the web interface.
 
 ## 📁 Project Setup
 

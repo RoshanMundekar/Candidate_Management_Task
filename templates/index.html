@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candidate Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-5">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header and Search -->
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
+      <h2 class="text-3xl font-bold">Candidate Management</h2>
+      <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+        <form method="GET" class="flex w-full sm:w-auto">
+          <input type="number" name="search_id" placeholder="Search by ID"
+            value="{{ search_id | default('') }}"
+            class="w-full sm:w-60 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <button type="submit"
+            class="px-4 py-2 bg-blue-600 text-white font-medium rounded-r-md hover:bg-blue-700">
+            Search
+          </button>
+        </form>
+        <button onclick="openModal()"
+          class="px-4 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700">
+          ➕ Add Data
+        </button>
+      </div>
+    </div>
+
+    <!-- Detail Form -->
+    {% if selected %}
+    <form id="detailForm" method="POST" class="bg-white shadow-md rounded-lg p-6 mb-8">
+      <input type="hidden" name="record_id" value="{{ selected.id }}">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block font-semibold mb-1">ID</label>
+          <input type="text" readonly value="{{ selected.id }}"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">Name</label>
+          <input type="text" readonly value="{{ selected.name }}"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block font-semibold mb-1">Location</label>
+          <input type="text" readonly value="{{ selected.location }}"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">Degree</label>
+          <input type="text" readonly value="{{ selected.degree }}"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block font-semibold mb-1">Mobile</label>
+          <input type="text" readonly value="{{ selected.mobile }}"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">Email</label>
+          <input type="text" readonly value="{{ selected.email }}"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-semibold mb-1">Feedback</label>
+        <input type="text" name="feedback" value="{{ selected.feedback }}" placeholder="Enter feedback"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md">
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div>
+          <label class="block font-semibold mb-1">Note</label>
+          <input type="text" name="note" value="{{ selected.note }}" placeholder="Enter note"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md">
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">Action</label>
+          <input type="text" name="action" value="{{ selected.action }}" placeholder="Enter action"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md">
+        </div>
+      </div>
+
+      <button type="submit"
+        class="w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition">
+        Update Record
+      </button>
+    </form>
+    {% endif %}
+
+    <!-- Records Table -->
+    <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ID</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Name</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Location</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Degree</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Mobile</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Email</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for rec in records %}
+          <tr class="hover:bg-blue-50 {% if rec.id == selected.id %}bg-blue-100{% endif %}"
+              onclick="window.location='/?search_id={{ rec.id }}'">
+            <td class="px-4 py-2">{{ rec.id }}</td>
+            <td class="px-4 py-2">{{ rec.name }}</td>
+            <td class="px-4 py-2">{{ rec.location }}</td>
+            <td class="px-4 py-2">{{ rec.degree }}</td>
+            <td class="px-4 py-2">{{ rec.mobile }}</td>
+            <td class="px-4 py-2">{{ rec.email }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal Backdrop -->
+  <div id="modalBackdrop" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+
+  <!-- Modal -->
+  <div id="modal" class="hidden fixed inset-0 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+      <button onclick="closeModal()"
+        class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
+      <h3 class="text-xl font-bold mb-4">Add New Candidate</h3>
+      <form method="POST" action="/add">
+        <div class="grid grid-cols-1 gap-4 mb-6">
+          <input type="number" name="id" required placeholder="ID"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md">
+          <input type="text" name="name" required placeholder="Name"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md">
+          <input type="text" name="location" required placeholder="Location"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md">
+          <input type="text" name="degree" required placeholder="Degree"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md">
+          <input type="text" name="mobile" required placeholder="Mobile"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md">
+          <input type="email" name="email" required placeholder="Email"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md">
+        </div>
+        <button type="submit"
+          class="w-full bg-green-600 text-white py-3 rounded-md font-semibold hover:bg-green-700 transition">
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Script -->
+  <script>
+    function openModal() {
+      document.getElementById('modal').classList.remove('hidden');
+      document.getElementById('modalBackdrop').classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+      document.getElementById('modalBackdrop').classList.add('hidden');
+    }
+
+    window.addEventListener('load', () => {
+      if (window.location.search.includes('search_id') && document.getElementById('detailForm')) {
+        document.getElementById('detailForm').scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  </script>
+</body>
+</html>

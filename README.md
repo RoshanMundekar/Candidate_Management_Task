@@ -30,12 +30,8 @@ A web-based Candidate Management System built with **Flask**, **Tailwind CSS**, 
 
 ---
 
-## 📹 Demo Video
-
-> Add your demo video to `assets/` folder or upload to YouTube and embed the link below.
-
-**YouTube Demo (if applicable):**  
-[![Watch on YouTube](assets/demo.mp4)](assets/demo.mp4)
+📹 **Demo Video**  
+[Download or Watch Video](assets/demo.mp4)
 
 ---
 
